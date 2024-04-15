@@ -2,12 +2,14 @@
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
+import { usePrimeVue } from 'primevue/config';
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
+const $primevue = usePrimeVue();
 
 onMounted(() => {
     bindOutsideClickListener();
@@ -17,6 +19,20 @@ onBeforeUnmount(() => {
     unbindOutsideClickListener();
 });
 
+
+const onDarkModeChange = (value) => {
+    const newThemeName = value ? layoutConfig.theme.value.replace('light', 'dark') : layoutConfig.theme.value.replace('dark', 'light');
+
+    layoutConfig.darkTheme.value = value;
+    onChangeTheme(newThemeName, value);
+};
+
+const onChangeTheme = (theme, mode) => {
+    $primevue.changeTheme(layoutConfig.theme.value, theme, 'theme-css', () => {
+        layoutConfig.theme.value = theme;
+        layoutConfig.darkTheme.value = mode;
+    });
+};
 
 
 const onTopBarMenuButton = () => {
@@ -71,6 +87,11 @@ const isOutsideClicked = (event) => {
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
+
+            <section class="py-4 flex align-items-center justify-content-between border-bottom-1 surface-border">
+                <span :class="['text-xl font-semibold']">Dark Mode</span>
+                <InputSwitch :modelValue="layoutConfig.darkTheme.value" @update:modelValue="onDarkModeChange" />
+            </section>
             <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
                 <i class="pi pi-calendar"></i>
                 <span>Calendar</span>
@@ -79,7 +100,7 @@ const isOutsideClicked = (event) => {
                 <i class="pi pi-user"></i>
                 <span>Profile</span>
             </button>
-            <button @click="onSettingsClick()" class="p-link layout-topbar-button">
+            <button @click="" class="p-link layout-topbar-button">
                 <i class="pi pi-cog"></i>
                 <span>Settings</span>
             </button>
