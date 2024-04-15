@@ -44,6 +44,7 @@ watch(
     }
 );
 const itemClick = (event, item) => {
+    window.location.href = item.to;
     if (item.disabled) {
         event.preventDefault();
         return;
@@ -65,6 +66,7 @@ const itemClick = (event, item) => {
 };
 
 const checkActiveRoute = (item) => {
+    console.log(item)
     return route.path === item.to;
 };
 </script>

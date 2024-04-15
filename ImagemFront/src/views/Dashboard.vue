@@ -24,14 +24,46 @@ const graph = ref({
   Positive: []
 });
 const lineOptions = ref(null);
-
+var hotels =  [
+  {
+    "hotel": "Hotel Arena",
+    "problem": "room",
+    "recurrence": 872,
+    "solution": ""
+  },
+  {
+    "hotel": "K K Hotel George",
+    "problem": "hotel",
+    "recurrence": 445,
+    "solution": ""
+  },
+  {
+    "hotel": "Apex Temple Court Hotel",
+    "problem": "small",
+    "recurrence": 211,
+    "solution": ""
+  },
+  {
+    "hotel": "The Park Grand London Paddington",
+    "problem": "staff",
+    "recurrence": 195,
+    "solution": ""
+  },
+  {
+    "hotel": "The Principal London",
+    "problem": "bed",
+    "recurrence": 177,
+    "solution": ""
+  }
+]
 onMounted(async () => {
     try {
         chartData.value = setChartData();
         chartOptions.value = setChartOptions();
         const response = await axios.get('http://127.0.0.1:5000/calculos/cards');
         const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
-        graph.value = response2.data;
+        // const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
+    
 
         console.log(graph.value.Neutral.map(value => Number(value)));
         products.value = response.data;
@@ -196,6 +228,7 @@ const applyDarkTheme = () => {
     };
 };
 
+
 watch(
     isDarkTheme,
     (val) => {
@@ -207,6 +240,7 @@ watch(
     },
     { immediate: true }
 );
+
 </script>
 
 
@@ -246,7 +280,6 @@ watch(
                     <div class="flex align-items-center justify-content-center bg-yellow-100 border-round" style="width: 2.5rem; height: 2.5rem">
                     </div>
                 </div>
-           
             </div>
         </div>
         <div class="col-12 lg:col-6 xl:col-3">
@@ -254,7 +287,7 @@ watch(
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Satisfaction Index</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">%{{satisfactionIndex}}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{satisfactionIndex}}%</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
                     </div>
@@ -265,25 +298,11 @@ watch(
         <div class="col-12 xl:col-6">
             <div class="card">
                 <h5>Top 5 Recent Insights</h5>
-                <DataTable :value="products" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column style="width: 15%">
-                        <template #header> Hotel </template>
-                        <template #body="slotProps">
-                            <img :src="'demo/images/product/' + slotProps.data.image" :alt="slotProps.data.image" width="50" class="shadow-2" />
-                        </template>
-                    </Column>
-                    <Column field="name" header="Problem" :sortable="true" style="width: 35%"></Column>
-                    <Column field="price" header="Price" :sortable="true" style="width: 35%">
-                        <template #body="slotProps">
-                            {{ formatCurrency(slotProps.data.price) }}
-                        </template>
-                    </Column>
-                    <Column style="width: 15%">
-                        <template #header> View </template>
-                        <template #body>
-                            <Button icon="pi pi-search" type="button" class="p-button-text"></Button>
-                        </template>
-                    </Column>
+                <DataTable :value="hotels" :rows="5" :paginator="true" responsiveLayout="scroll">
+                    <Column field="hotel" header="Hotel" :sortable="true" style="width: 25%"></Column>
+                    <Column field="problem" header="Problem" :sortable="true" style="width: 25%"></Column>
+                    <Column field="recurrence" header="Recurrence" :sortable="true" style="width: 25%"></Column>
+                    <!-- <Column field="solution" header="Solution" :sortable="true" style="width: 25%"></Column> -->
                 </DataTable>
             </div>
             
