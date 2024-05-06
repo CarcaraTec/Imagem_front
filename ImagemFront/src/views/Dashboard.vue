@@ -1,10 +1,10 @@
-
-
 <script setup>
+
 import Chart from 'primevue/chart';
+import Dialog from 'primevue/dialog';
 
-
-
+import ChartBarGoodAverage from '../components/ChartBarGoodAverage.vue';
+import ChartBarBadAverage from '../components/ChartBarBadAverage.vue';
 import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useLayout } from '@/layout/composables/layout';
@@ -18,43 +18,46 @@ const neutrals = ref(null);
 const satisfactionIndex = ref(null);
 
 
+const usuario = localStorage.getItem('usuario');
+
+
 const graph = ref({
-  Negative: [],
-  Neutral: [],
-  Positive: []
+    Negative: [],
+    Neutral: [],
+    Positive: []
 });
 const lineOptions = ref(null);
-var hotels =  [
-  {
-    "hotel": "Hotel Arena",
-    "problem": "room",
-    "recurrence": 872,
-    "solution": ""
-  },
-  {
-    "hotel": "K K Hotel George",
-    "problem": "hotel",
-    "recurrence": 445,
-    "solution": ""
-  },
-  {
-    "hotel": "Apex Temple Court Hotel",
-    "problem": "small",
-    "recurrence": 211,
-    "solution": ""
-  },
-  {
-    "hotel": "The Park Grand London Paddington",
-    "problem": "staff",
-    "recurrence": 195,
-    "solution": ""
-  },
-  {
-    "hotel": "The Principal London",
-    "problem": "bed",
-    "recurrence": 177,
-    "solution": ""
-  }
+var hotels = [
+    {
+        "hotel": "Hotel Arena",
+        "problem": "room",
+        "recurrence": 872,
+        "solution": ""
+    },
+    {
+        "hotel": "K K Hotel George",
+        "problem": "hotel",
+        "recurrence": 445,
+        "solution": ""
+    },
+    {
+        "hotel": "Apex Temple Court Hotel",
+        "problem": "small",
+        "recurrence": 211,
+        "solution": ""
+    },
+    {
+        "hotel": "The Park Grand London Paddington",
+        "problem": "staff",
+        "recurrence": 195,
+        "solution": ""
+    },
+    {
+        "hotel": "The Principal London",
+        "problem": "bed",
+        "recurrence": 177,
+        "solution": ""
+    }
 ]
 onMounted(async () => {
     try {
@@ -63,7 +66,7 @@ onMounted(async () => {
         const response = await axios.get('http://127.0.0.1:5000/calculos/cards');
         const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
         // const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
-    
+
 
         console.log(graph.value.Neutral.map(value => Number(value)));
         products.value = response.data;
@@ -81,12 +84,28 @@ const chartOptions = ref();
 
 const data = [28, 48, 40, 50, 86, 27, 100]
 console.log(data)
+const confirm1 = () => {
+    confirm.require({
+        message: 'Are you sure you want to proceed?',
+        header: 'Confirmation',
+        icon: 'pi pi-exclamation-triangle',
+        rejectClass: 'p-button-secondary p-button-outlined',
+        rejectLabel: 'Cancel',
+        acceptLabel: 'Save',
+        accept: () => {
+            toast.add({ severity: 'info', summary: 'Confirmed', detail: 'You have accepted', life: 3000 });
+        },
+        reject: () => {
+            toast.add({ severity: 'error', summary: 'Rejected', detail: 'You have rejected', life: 3000 });
+        }
+    });
+};
 const setChartData = () => {
- 
+
     const documentStyle = getComputedStyle(document.documentElement);
 
     return {
-        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July','August','September','October','November','December'],
+        labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         datasets: [
             {
                 label: 'Positives',
@@ -115,6 +134,7 @@ const setChartData = () => {
         ]
     };
 };
+
 const setChartOptions = () => {
     const documentStyle = getComputedStyle(document.documentElement);
     const textColor = documentStyle.getPropertyValue('--text-color');
@@ -240,9 +260,11 @@ watch(
     },
     { immediate: true }
 );
-
+const openModal = (rowData) => {
+    selectedHotel.value = rowData;
+    showModal.value = true;
+};
 </script>
-
 
 <template>
     <div class="grid">
@@ -251,9 +273,10 @@ watch(
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Positives</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{positives}}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ positives }}</div>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-green-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-green-100 border-round"
+                        style="width: 2.5rem; height: 2.5rem">
                     </div>
                 </div>
             </div>
@@ -263,9 +286,10 @@ watch(
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Negatives</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{negatives}}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ negatives }}</div>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-red-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-red-100 border-round"
+                        style="width: 2.5rem; height: 2.5rem">
                     </div>
                 </div>
             </div>
@@ -275,9 +299,10 @@ watch(
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Neutrals</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{neutrals}}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ neutrals }}</div>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-yellow-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-yellow-100 border-round"
+                        style="width: 2.5rem; height: 2.5rem">
                     </div>
                 </div>
             </div>
@@ -287,9 +312,11 @@ watch(
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Satisfaction Index</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{satisfactionIndex}}%</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ satisfactionIndex }}%
+                        </div>
                     </div>
-                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round" style="width: 2.5rem; height: 2.5rem">
+                    <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
+                        style="width: 2.5rem; height: 2.5rem">
                     </div>
                 </div>
             </div>
@@ -302,18 +329,39 @@ watch(
                     <Column field="hotel" header="Hotel" :sortable="true" style="width: 25%"></Column>
                     <Column field="problem" header="Problem" :sortable="true" style="width: 25%"></Column>
                     <Column field="recurrence" header="Recurrence" :sortable="true" style="width: 25%"></Column>
-                    <!-- <Column field="solution" header="Solution" :sortable="true" style="width: 25%"></Column> -->
+                    <Column style="width: 15%">
+                        <template #header> Solution </template>
+                        <template #body="{ rowData }">
+                            <Button icon="pi pi-search" type="button" class="p-button-text"
+                                @click="openModal(rowData)"></Button>
+                        </template>
+                    </Column>
                 </DataTable>
+
+                <Dialog v-model="showModal" modal header="Solution Modal" :style="{ width: '50vw' }">
+                    <!-- Conteúdo do modal aqui -->
+                    <p>Modal content goes here</p>
+                </Dialog>
             </div>
-            
+
         </div>
         <div class="col-12 xl:col-6">
             <div class="card">
-    <h5>Progression of assessments over time</h5>
-    <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
-</div>
-
+                <h5>Progression of assessments over time</h5>
+                <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
+            </div>
+        </div>
+        <div class="col-12 xl:col-6">
+            <div class="card">
+                <h5>Top 5 best rated hotels</h5>
+                <ChartBarGoodAverage />
+            </div>
+        </div>
+        <div class="col-12 xl:col-6">
+            <div class="card">
+                <h5>Top 5 worst rated hotels</h5>
+                <ChartBarBadAverage />
+            </div>
         </div>
     </div>
 </template>
-

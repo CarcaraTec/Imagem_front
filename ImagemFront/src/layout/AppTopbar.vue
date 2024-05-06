@@ -6,24 +6,35 @@ import { usePrimeVue } from 'primevue/config';
 
 const { layoutConfig, onMenuToggle } = useLayout();
 
+
 const outsideClickListener = ref(null);
 const topbarMenuActive = ref(false);
 const router = useRouter();
 const $primevue = usePrimeVue();
 
+
+var darkMode = JSON.parse(localStorage.getItem('mode')) == true;
+console.log('modo :'+darkMode)
 onMounted(() => {
     bindOutsideClickListener();
+    onChangeTheme(JSON.parse(localStorage.getItem('theme')),JSON.parse(localStorage.getItem('mode')))
 });
 
 onBeforeUnmount(() => {
     unbindOutsideClickListener();
+
 });
 
 
 const onDarkModeChange = (value) => {
+    darkMode = value;
     const newThemeName = value ? layoutConfig.theme.value.replace('light', 'dark') : layoutConfig.theme.value.replace('dark', 'light');
-
     layoutConfig.darkTheme.value = value;
+    localStorage.setItem('mode', JSON.stringify(value));
+    localStorage.setItem('theme', JSON.stringify(newThemeName));
+    var theme = localStorage.getItem('theme');
+    var parsedTheme = JSON.parse(theme);
+    console.log(parsedTheme)
     onChangeTheme(newThemeName, value);
 };
 
@@ -38,10 +49,7 @@ const onChangeTheme = (theme, mode) => {
 const onTopBarMenuButton = () => {
     topbarMenuActive.value = !topbarMenuActive.value;
 };
-const onSettingsClick = () => {
-    topbarMenuActive.value = false;
-    router.push('/documentation');
-};
+
 const topbarMenuClasses = computed(() => {
     return {
         'layout-topbar-menu-mobile-active': topbarMenuActive.value
@@ -72,6 +80,8 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
+const checked = ref(false);
+
 </script>
 
 <template>
@@ -89,8 +99,7 @@ const isOutsideClicked = (event) => {
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
 
             <section class="py-4 flex align-items-center justify-content-between border-bottom-1 surface-border">
-                <span :class="['text-xl font-semibold']">Dark Mode</span>
-                <InputSwitch :modelValue="layoutConfig.darkTheme.value" @update:modelValue="onDarkModeChange" />
+                <ToggleButton v-model="checked" class="w-6rem" :onLabel="darkMode ? 'Dark' : 'White'" :offLabel="darkMode ? 'Dark' : 'White'" @update:modelValue="onDarkModeChange"/>
             </section>
             <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
                 <i class="pi pi-calendar"></i>
