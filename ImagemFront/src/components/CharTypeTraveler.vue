@@ -31,8 +31,8 @@ const setChartData = (data) => {
         datasets: [
             {
                 label: 'Negatives',
-                backgroundColor: documentStyle.getPropertyValue('--cyan-500'),
-                borderColor: documentStyle.getPropertyValue('--cyan-500'),
+                backgroundColor: documentStyle.getPropertyValue('--red-500'),
+                borderColor: documentStyle.getPropertyValue('--red-500'),
                 data: [data.leisure.negativos, data.outros.negativos, data.business.negativos]
             },
             {
@@ -43,8 +43,8 @@ const setChartData = (data) => {
             },
             {
                 label: 'Positives',
-                backgroundColor: documentStyle.getPropertyValue('--blue-500'),
-                borderColor: documentStyle.getPropertyValue('--blue-500'),
+                backgroundColor: documentStyle.getPropertyValue('--green-500'),
+                borderColor: documentStyle.getPropertyValue('--green-500'),
                 data: [data.leisure.positivos, data.outros.positivos, data.business.positivos]
             }
         ]
