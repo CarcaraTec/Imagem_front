@@ -5,10 +5,11 @@ import Dialog from 'primevue/dialog';
 
 import ChartBarGoodAverage from '../components/ChartBarGoodAverage.vue';
 import ChartBarBadAverage from '../components/ChartBarBadAverage.vue';
+import CharTypeTraveler from '../components/CharTypeTraveler.vue';
 import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useLayout } from '@/layout/composables/layout';
-
+ 
 const { isDarkTheme } = useLayout();
 
 const products = ref(null);
@@ -363,5 +364,11 @@ const openModal = (rowData) => {
                 <ChartBarBadAverage />
             </div>
         </div>
+        <div class="col-12 xl:col-6 mx-auto">
+          <div class="card">
+               <h5 class="text-center">Comparative Sentiment Analysis by Travel Type (%)</h5>
+               <CharTypeTraveler/>
+         </div>
+       </div>
     </div>
 </template>
