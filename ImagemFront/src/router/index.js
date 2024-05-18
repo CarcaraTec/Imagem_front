@@ -11,163 +11,166 @@ const router = createRouter({
                 {
                     path: '/',
                     name: 'dashboard',
-                    component: () => import('@/views/Dashboard.vue')
+                    component: () => import('@/Views/Dashboard.vue')
                 },
                 {
                     path: '/uikit/formlayout',
                     name: 'formlayout',
-                    component: () => import('@/views/uikit/FormLayout.vue')
+                    component: () => import('@/Views/UiKit/FormLayout.vue')
                 },
                 {
                     path: '/uikit/input',
                     name: 'input',
-                    component: () => import('@/views/uikit/Input.vue')
+                    component: () => import('@/Views/UiKit/Input.vue')
                 },
                 {
                     path: '/uikit/floatlabel',
                     name: 'floatlabel',
-                    component: () => import('@/views/uikit/FloatLabel.vue')
+                    component: () => import('@/Views/UiKit/FloatLabel.vue')
                 },
                 {
                     path: '/uikit/invalidstate',
                     name: 'invalidstate',
-                    component: () => import('@/views/uikit/InvalidState.vue')
+                    component: () => import('@/Views/UiKit/InvalidState.vue')
                 },
                 {
                     path: '/uikit/button',
                     name: 'button',
-                    component: () => import('@/views/uikit/Button.vue')
+                    component: () => import('@/Views/UiKit/Button.vue')
                 },
                 {
                     path: '/uikit/table',
                     name: 'table',
-                    component: () => import('@/views/uikit/Table.vue')
+                    component: () => import('@/Views/UiKit/Table.vue')
                 },
                 {
                     path: '/uikit/list',
                     name: 'list',
-                    component: () => import('@/views/uikit/List.vue')
+                    component: () => import('@/Views/UiKit/List.vue')
                 },
                 {
                     path: '/uikit/tree',
                     name: 'tree',
-                    component: () => import('@/views/uikit/Tree.vue')
+                    component: () => import('@/Views/UiKit/Tree.vue')
                 },
                 {
                     path: '/uikit/panel',
                     name: 'panel',
-                    component: () => import('@/views/uikit/Panels.vue')
+                    component: () => import('@/Views/UiKit/Panels.vue')
                 },
-
                 {
                     path: '/uikit/overlay',
                     name: 'overlay',
-                    component: () => import('@/views/uikit/Overlay.vue')
+                    component: () => import('@/Views/UiKit/Overlay.vue')
                 },
                 {
                     path: '/uikit/media',
                     name: 'media',
-                    component: () => import('@/views/uikit/Media.vue')
+                    component: () => import('@/Views/UiKit/Media.vue')
                 },
                 {
                     path: '/uikit/menu',
-                    component: () => import('@/views/uikit/Menu.vue'),
+                    component: () => import('@/Views/UiKit/Menu.vue'),
                     children: [
                         {
                             path: '/uikit/menu',
-                            component: () => import('@/views/uikit/menu/PersonalDemo.vue')
+                            component: () => import('@/Views/UiKit/Menu/PersonalDemo.vue')
                         },
                         {
                             path: '/uikit/menu/seat',
-                            component: () => import('@/views/uikit/menu/SeatDemo.vue')
+                            component: () => import('@/Views/UiKit/Menu/SeatDemo.vue')
                         },
                         {
                             path: '/uikit/menu/payment',
-                            component: () => import('@/views/uikit/menu/PaymentDemo.vue')
+                            component: () => import('@/Views/UiKit/Menu/PaymentDemo.vue')
                         },
                         {
                             path: '/uikit/menu/confirmation',
-                            component: () => import('@/views/uikit/menu/ConfirmationDemo.vue')
+                            component: () => import('@/Views/UiKit/Menu/ConfirmationDemo.vue')
                         }
                     ]
                 },
                 {
                     path: '/uikit/message',
                     name: 'message',
-                    component: () => import('@/views/uikit/Messages.vue')
+                    component: () => import('@/Views/UiKit/Messages.vue')
                 },
                 {
                     path: '/uikit/file',
                     name: 'file',
-                    component: () => import('@/views/uikit/File.vue')
+                    component: () => import('@/Views/UiKit/File.vue')
                 },
                 {
                     path: '/uikit/charts',
                     name: 'charts',
-                    component: () => import('@/views/uikit/Chart.vue')
+                    component: () => import('@/Views/UiKit/Chart.vue')
                 },
                 {
                     path: '/uikit/misc',
                     name: 'misc',
-                    component: () => import('@/views/uikit/Misc.vue')
+                    component: () => import('@/Views/UiKit/Misc.vue')
                 },
                 {
                     path: '/blocks',
                     name: 'blocks',
-                    component: () => import('@/views/utilities/Blocks.vue')
+                    component: () => import('@/Views/Utilities/Blocks.vue')
                 },
                 {
                     path: '/utilities/icons',
                     name: 'icons',
-                    component: () => import('@/views/utilities/Icons.vue')
+                    component: () => import('@/Views/Utilities/Icons.vue')
                 },
                 {
                     path: '/pages/timeline',
                     name: 'timeline',
-                    component: () => import('@/views/pages/Timeline.vue')
+                    component: () => import('@/Views/Pages/Timeline.vue')
                 },
                 {
                     path: '/pages/empty',
                     name: 'empty',
-                    component: () => import('@/views/pages/Empty.vue')
+                    component: () => import('@/Views/Pages/Empty.vue')
                 },
                 {
                     path: '/pages/crud',
                     name: 'crud',
-                    component: () => import('@/views/pages/Crud.vue')
+                    component: () => import('@/Views/Pages/Crud.vue')
                 },
                 {
                     path: '/documentation',
                     name: 'documentation',
-                    component: () => import('@/views/utilities/Documentation.vue')
+                    component: () => import('@/Views/Utilities/Documentation.vue')
                 }
             ]
         },
         {
             path: '/landing',
             name: 'landing',
-            component: () => import('@/views/pages/Landing.vue')
+            component: () => import('@/Views/Pages/Landing.vue')
         },
         {
             path: '/pages/notfound',
             name: 'notfound',
-            component: () => import('@/views/pages/NotFound.vue')
+            component: () => import('@/Views/Pages/NotFound.vue')
         },
-
         {
             path: '/auth/login',
             name: 'login',
-            component: () => import('@/views/pages/auth/Login.vue')
+            component: () => import('@/Views/Pages/Auth/Login.vue')
+        },
+        {
+            path: '/auth/register',
+            name: 'register',
+            component: () => import('@/Views/Pages/Auth/Register.vue')
         },
         {
             path: '/auth/access',
             name: 'accessDenied',
-            component: () => import('@/views/pages/auth/Access.vue')
+            component: () => import('@/Views/Pages/Auth/Access.vue')
         },
         {
             path: '/auth/error',
             name: 'error',
-            component: () => import('@/views/pages/auth/Error.vue')
+            component: () => import('@/Views/Pages/Auth/Error.vue')
         }
     ]
 });

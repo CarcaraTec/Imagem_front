@@ -66,9 +66,9 @@ onMounted(async () => {
         chartData.value = setChartData();
         chartOptions.value = setChartOptions();
         const response = await axios.get('http://127.0.0.1:5000/calculos/cards');
-        const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
-        // const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
-
+        console.log(response);
+        // const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
+        const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
 
         console.log(graph.value.Neutral.map(value => Number(value)));
         products.value = response.data;
