@@ -14,7 +14,14 @@ const model = ref([
             { label: 'Heat Map', icon: 'pi pi-fw pi-id-card', to: '/uikit/formlayout' },
             { label: 'Exact location map', icon: 'pi pi-fw pi-check-square', to: '/uikit/input' }
         ]
+    },
+    {
+        label: 'Type Graphics',
+        items: [{label:'Type Traveler', icon: 'pi pi-fw pi-home', to: '/uikit/TypeTraveler'}
+
+        ]
     }
+    
 ]);
 </script>
 
