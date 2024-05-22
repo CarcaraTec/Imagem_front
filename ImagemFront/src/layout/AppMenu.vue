@@ -17,10 +17,12 @@ const model = ref([
     },
     {
         label: 'Type Graphics',
-        items: [{label:'Type Traveler', icon: 'pi pi-fw pi-home', to: '/uikit/TypeTraveler'}
+        items: [{label:'Type Traveler', icon: 'pi pi-fw pi-home', to: '/uikit/menu/TypeTraveler'},
+                {label:'Type Hotel', icon: 'pi pi-fw pi-home', to: '/uikit/TypeHotel'}
 
         ]
-    }
+    },
+
     
 ]);
 </script>
