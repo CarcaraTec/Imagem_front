@@ -10,6 +10,7 @@ import ChartTypeTraveler from '../components/ChartTypeTraveler.vue';
 import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useLayout } from '@/layout/composables/layout';
+import ChartTypesGuests from '../components/ChartTypesGuests.vue';
 
 const { isDarkTheme } = useLayout();
 
@@ -375,6 +376,12 @@ const openModal = (rowData) => {
           <div class="card">
                <h5 class="text-center">Comparative Analysis by Travel Type (%)</h5>
                <ChartTypeTraveler/>
+         </div>
+       </div>
+       <div class="col-12 xl:col-6 mx-auto">
+          <div class="card">
+               <h5 class="text-center">Comparative Analysis by Type Guests (%)</h5>
+               <ChartTypesGuests/>
          </div>
        </div>
     </div>
