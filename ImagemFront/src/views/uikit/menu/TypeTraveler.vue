@@ -1,6 +1,8 @@
 <template>
   <div class="grid">
+
     <div class="col-12">
+      <SearchFilterBar/>
       <div class="card p-fluid">
         <h2 style="font-size: 1.5em; margin-bottom: 20px;">Type Traveler Dashboard</h2>
         
@@ -25,6 +27,7 @@
 </template>
 
 <script setup>
+import SearchFilterBar from '../../../components/SearchFilterBar.vue';
 import CharTypeTraveler from '@/components/CharTypeTraveler.vue';
 import ChartTypeTraveler from '@/components/ChartTypeTraveler.vue';
 import ChartTypesGuests from '../../../components/ChartTypesGuests.vue';
