@@ -9,7 +9,7 @@ import { onMounted } from "vue";
 import {chartData, popularGrafico1, chartOptions} from "../interfaces/GraphicManagedChartTraveler.ts"
 
 onMounted(async () => {
-    popularGrafico1('','','');
+    await popularGrafico1('','','');
 });
 
 

@@ -1,6 +1,5 @@
 <template>
   <div class="grid">
-
     <div class="col-12">
       <SearchFilterBar/>
       <div class="card p-fluid">
