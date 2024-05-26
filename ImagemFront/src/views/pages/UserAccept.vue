@@ -1,21 +1,25 @@
 <template>
-    <DataTable :value="products" tableStyle="min-width: 50rem">
-        <Column field="userId" header="ID"></Column>
-        <Column field="nome" header="NAME"></Column>
-        <Column field="telefone" header="PHONE"></Column>
-        <Column field="email" header="E-MAIL"></Column>
-        <Column header="APPROVE">
-            <template #body="slotProps">
-                <Button @click="ativarUsuario(slotProps.data.userId)">Ativar</Button>
-            </template>
-        </Column>
-    </DataTable>
+    <div>
+        <h1>Pending User Approvals</h1>
+        <p>Below is a list of users awaiting approval. Review their details and click "Approve" to grant them access to the system.</p>
+        <DataTable :value="products" tableStyle="min-width: 50rem">
+            <Column field="userId" header="ID"></Column>
+            <Column field="nome" header="Name"></Column>
+            <Column field="telefone" header="Phone"></Column>
+            <Column field="email" header="Email"></Column>
+            <Column header="Action">
+                <template #body="slotProps">
+                    <Button @click="ativarUsuario(slotProps.data.userId)">Approve</Button>
+                </template>
+            </Column>
+        </DataTable>
+    </div>
 </template>
 
 <script setup>
 import { ref, onMounted } from 'vue';
 import Button from 'primevue/button';
-
+const value = JSON.parse(localStorage.getItem('userData'));
 import axios from 'axios';
 
 const products = ref([]);  // Inicializando com um array vazio
@@ -27,7 +31,7 @@ async function ativarUsuario(idUsuario) {
             {}, // Corpo do POST, pode ser vazio se não precisar de payload
             {
                 headers: {
-                    'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbWFnZW1fYmFja2VuZF9zZWN1cml0eSIsInN1YiI6InN0cmluZyIsImV4cCI6MTcxNjY5Mjc3OH0.wLi14lLB28pX6kBHR1jqOchkDrOeiA9QJPtR_xQMaIs'
+                    'Authorization': 'Bearer '+value
                 }
             }
         );
@@ -41,7 +45,7 @@ onMounted(async () => {
     try {
         const response = await axios.get('http://localhost:8080/user/usuariosStatusAguardando', {
             headers: {
-                'Authorization': 'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJpbWFnZW1fYmFja2VuZF9zZWN1cml0eSIsInN1YiI6InN0cmluZyIsImV4cCI6MTcxNjY5Mjc3OH0.wLi14lLB28pX6kBHR1jqOchkDrOeiA9QJPtR_xQMaIs'
+                'Authorization': 'Bearer '+value
             }
         });
 
