@@ -23,7 +23,7 @@
 <script setup>
 import { ref, onMounted } from 'vue';
 import Button from 'primevue/button';
-const value = JSON.parse(localStorage.getItem('userData'));
+const user = JSON.parse(localStorage.getItem('userData'));
 import axios from 'axios';
 import { useToast } from "primevue/usetoast";
 
@@ -40,7 +40,7 @@ async function ativarUsuario(idUsuario, status) {
             {},
             {
                 headers: {
-                    'Authorization': 'Bearer ' + value
+                    'Authorization': 'Bearer ' + user.token
                 }
             }
         );
@@ -60,7 +60,7 @@ onMounted(async () => {
     try {
         const response = await axios.get('http://localhost:8080/user/usuariosStatusAguardando', {
             headers: {
-                'Authorization': 'Bearer ' + value
+                'Authorization': 'Bearer ' + user.token
             }
         });
 

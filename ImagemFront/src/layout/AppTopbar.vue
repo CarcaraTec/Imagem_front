@@ -6,7 +6,7 @@ import { usePrimeVue } from 'primevue/config';
 import Menu from 'primevue/menu';
 import 'primeicons/primeicons.css'
 import { useToast } from "primevue/usetoast";
-
+const user = JSON.parse(localStorage.getItem('userData'));
 const { layoutConfig, onMenuToggle } = useLayout();
 
 
@@ -89,8 +89,14 @@ const checked = ref(false);
 const menu = ref();
 const items = ref([
     {
-        label: 'Options',
-        items: [
+        label: user.nome,
+        items: [{
+                label: 'My Account',
+                icon: 'pi pi-user',
+            command: () => {
+                router.push('/my-account')
+            }
+            },
             {
                 label: 'User Management',
                 icon: 'pi pi-user-edit',

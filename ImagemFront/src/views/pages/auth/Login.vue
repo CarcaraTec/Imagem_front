@@ -37,6 +37,7 @@ const email = ref('');
 const password = ref('');
 const checked = ref(false);
 const router = useRouter();
+const toast = useToast();
 
 const logoUrl = computed(() => {
     return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
@@ -58,7 +59,8 @@ async function login(email, password) {
 async function handleLogin(email, password) {
     try {
         const averageScore = await login(email, password);
-        storeUserData(averageScore.token);
+        console.log(averageScore)
+        storeUserData(averageScore);
         router.push('/');
     } catch (error) {
         console.error("Login error:", error);
