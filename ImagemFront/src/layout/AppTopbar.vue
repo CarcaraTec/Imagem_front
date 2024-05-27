@@ -3,7 +3,10 @@ import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { useLayout } from '@/layout/composables/layout';
 import { useRouter } from 'vue-router';
 import { usePrimeVue } from 'primevue/config';
-
+import Menu from 'primevue/menu';
+import 'primeicons/primeicons.css'
+import { useToast } from "primevue/usetoast";
+const user = JSON.parse(localStorage.getItem('userData'));
 const { layoutConfig, onMenuToggle } = useLayout();
 
 
@@ -14,10 +17,10 @@ const $primevue = usePrimeVue();
 
 
 var darkMode = JSON.parse(localStorage.getItem('mode')) == true;
-console.log('modo :'+darkMode)
+console.log('modo :' + darkMode)
 onMounted(() => {
     bindOutsideClickListener();
-    onChangeTheme(JSON.parse(localStorage.getItem('theme')),JSON.parse(localStorage.getItem('mode')))
+    onChangeTheme(JSON.parse(localStorage.getItem('theme')), JSON.parse(localStorage.getItem('mode')))
 });
 
 onBeforeUnmount(() => {
@@ -80,14 +83,46 @@ const isOutsideClicked = (event) => {
 
     return !(sidebarEl.isSameNode(event.target) || sidebarEl.contains(event.target) || topbarEl.isSameNode(event.target) || topbarEl.contains(event.target));
 };
-const checked = ref(false);
+const toast = useToast();
 
+const checked = ref(false);
+const menu = ref();
+const items = ref([
+    {
+        label: user.nome,
+        items: [{
+                label: 'My Account',
+                icon: 'pi pi-user',
+            command: () => {
+                router.push('/my-account')
+            }
+            },
+            {
+                label: 'User Management',
+                icon: 'pi pi-user-edit',
+            command: () => {
+                router.push('/user-management')
+            }
+            },
+            {
+                label: 'Logout',
+                icon: 'pi pi-sign-out',
+            command: () => {
+                localStorage.removeItem('userData')
+                router.push('/auth/login')
+            }
+            }
+        ]
+    }
+]);
+
+const toggle = (event) => {
+    menu.value.toggle(event);
+};
 </script>
 
 <template>
     <div class="layout-topbar">
-  
-
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
@@ -98,21 +133,12 @@ const checked = ref(false);
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
 
-            <section class="py-4 flex align-items-center justify-content-between border-bottom-1 surface-border">
-                <ToggleButton v-model="checked" class="w-6rem" :onLabel="darkMode ? 'Dark' : 'White'" :offLabel="darkMode ? 'Dark' : 'White'" @update:modelValue="onDarkModeChange"/>
-            </section>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-calendar"></i>
-                <span>Calendar</span>
-            </button>
-            <button @click="onTopBarMenuButton()" class="p-link layout-topbar-button">
-                <i class="pi pi-user"></i>
-                <span>Profile</span>
-            </button>
-            <button @click="" class="p-link layout-topbar-button">
-                <i class="pi pi-cog"></i>
-                <span>Settings</span>
-            </button>
+            <ToggleButton v-model="checked" class="w-6rem" :onLabel="darkMode ? 'Dark' : 'White'"
+                :offLabel="darkMode ? 'Dark' : 'White'" @update:modelValue="onDarkModeChange" />
+                
+            <Button style="margin-left: 1rem;" type="button" icon="pi pi-ellipsis-v" @click="toggle" aria-haspopup="true"
+                aria-controls="overlay_menu" />
+            <Menu ref="menu" id="overlay_menu" :model="items" :popup="true" />
         </div>
     </div>
 </template>

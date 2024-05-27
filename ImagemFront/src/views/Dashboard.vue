@@ -5,9 +5,12 @@ import Dialog from 'primevue/dialog';
 
 import ChartBarGoodAverage from '../components/ChartBarGoodAverage.vue';
 import ChartBarBadAverage from '../components/ChartBarBadAverage.vue';
+import CharTypeTraveler from '../components/CharTypeTraveler.vue';
+import ChartTypeTraveler from '../components/ChartTypeTraveler.vue';
 import { onMounted, ref, watch } from 'vue';
 import axios from 'axios';
 import { useLayout } from '@/layout/composables/layout';
+import ChartTypesGuests from '../components/ChartTypesGuests.vue';
 
 const { isDarkTheme } = useLayout();
 
@@ -64,9 +67,9 @@ onMounted(async () => {
         chartData.value = setChartData();
         chartOptions.value = setChartOptions();
         const response = await axios.get('http://127.0.0.1:5000/calculos/cards');
-        const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
-        // const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
-
+        console.log(response);
+        // const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
+        const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
 
         console.log(graph.value.Neutral.map(value => Number(value)));
         products.value = response.data;
@@ -363,5 +366,23 @@ const openModal = (rowData) => {
                 <ChartBarBadAverage />
             </div>
         </div>
+        <div class="col-12 xl:col-6 mx-auto">
+          <div class="card">
+               <h5 class="text-center">Comparative Sentiment Analysis by Travel Type (%)</h5>
+               <CharTypeTraveler/>
+         </div>
+       </div>
+       <div class="col-12 xl:col-6 mx-auto">
+          <div class="card">
+               <h5 class="text-center">Comparative Analysis by Travel Type (%)</h5>
+               <ChartTypeTraveler/>
+         </div>
+       </div>
+       <div class="col-12 xl:col-6 mx-auto">
+          <div class="card">
+               <h5 class="text-center">Comparative Analysis by Type Guests (%)</h5>
+               <ChartTypesGuests/>
+         </div>
+       </div>
     </div>
 </template>
