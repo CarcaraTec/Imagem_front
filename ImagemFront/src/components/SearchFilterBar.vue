@@ -15,6 +15,7 @@ import { popularGrafico1 } from '../interfaces/GraphicManagedChartTraveler';
 import { popularGrafico2 } from '../interfaces/GraphicManagedGuests';
 import { popularGrafico3 } from '../interfaces/GraphicManagedChartBarGoodAverage';
 import { popularGrafico4 } from '../interfaces/GraphicManagedChartBarBadAverage';
+import { fetchNightStayData } from '../interfaces/GraphicManagedHotelNight';
 const dates = ref();
 const selectedCity = ref();
 
@@ -38,6 +39,7 @@ function mandarData(){
     }else if(route.name=='type-hotel'){
         popularGrafico3(date_time1,date_time2,selectedCity.value.code)
         popularGrafico4(date_time1,date_time2,selectedCity.value.code)
+        fetchNightStayData(date_time1,date_time2,selectedCity.value.code)
 
     }
 }
