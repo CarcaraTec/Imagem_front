@@ -16,6 +16,10 @@
             <ChartBarBadAvarage />
           </div>
         </div>
+        <div>
+          <ChartHotelNight />
+
+        </div>
         
       </div>
     </div>
@@ -26,6 +30,7 @@
 import ChartBarGoodAverage from '../../components/ChartBarGoodAverage.vue';
 import ChartBarBadAvarage from '../../components/ChartBarBadAverage.vue';
 import SearchFilterBar from '../../components/SearchFilterBar.vue';
+import ChartHotelNight from '../../components/ChartHotelNight.vue';
 </script>
 
 <style scoped>
