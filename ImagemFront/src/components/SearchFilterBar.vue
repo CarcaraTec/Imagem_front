@@ -16,6 +16,8 @@ import { popularGrafico2 } from '../interfaces/GraphicManagedGuests';
 import { popularGrafico3 } from '../interfaces/GraphicManagedChartBarGoodAverage';
 import { popularGrafico4 } from '../interfaces/GraphicManagedChartBarBadAverage';
 import { fetchNightStayData } from '../interfaces/GraphicManagedHotelNight';
+import { popularGrafico8 } from '../interfaces/GraphicManagedTypeAvaliation.ts';
+
 const dates = ref();
 const selectedCity = ref();
 
@@ -36,6 +38,7 @@ function mandarData(){
         popularGrafico(date_time1,date_time2,selectedCity.value.code)
         popularGrafico1(date_time1,date_time2,selectedCity.value.code)
         popularGrafico2(date_time1,date_time2,selectedCity.value.code)
+        popularGrafico8(date_time1,date_time2, selectedCity.value.code)
     }else if(route.name=='type-hotel'){
         popularGrafico3(date_time1,date_time2,selectedCity.value.code)
         popularGrafico4(date_time1,date_time2,selectedCity.value.code)

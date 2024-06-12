@@ -20,6 +20,10 @@
         <h3 style="font-size: 1.2em; margin-top: 30px; margin-bottom: 10px;">Comparative Analysis by Type Guest (%)</h3>
         <!-- Gráfico do ChartTypeTraveler -->
         <ChartTypesGuests />
+
+        <h3 style="font-size: 1.2em; margin-top: 30px; margin-bottom: 10px;">Analysis of the Origin of Evaluation</h3>
+        <!-- Gráfico do ChartTypeTraveler -->
+        <ChartTypeAvaliation />
       </div>
     </div>
   </div>
@@ -30,6 +34,7 @@ import SearchFilterBar from '../../../components/SearchFilterBar.vue';
 import CharTypeTraveler from '@/components/CharTypeTraveler.vue';
 import ChartTypeTraveler from '@/components/ChartTypeTraveler.vue';
 import ChartTypesGuests from '../../../components/ChartTypesGuests.vue';
+import ChartTypeAvaliation from '../../../components/ChartTypeAvaliation.vue';
 </script>
 
 <style scoped>
