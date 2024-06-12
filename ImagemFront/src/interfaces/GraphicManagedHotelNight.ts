@@ -4,7 +4,7 @@ import axios from "axios";
 
 export const chartData = ref({});
 export const chartOptions = ref({});
-
+    
 // Função para buscar os dados da URL e configurar o gráfico
 export const fetchNightStayData = async (data_ini : any, data_fin: any,cidade: any) => {
     try {
