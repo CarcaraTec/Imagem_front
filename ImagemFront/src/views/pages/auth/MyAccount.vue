@@ -11,11 +11,12 @@
                             :loading="loading" @click="habilitarEdicao()" class="small-button" />
                     </div>
                 </div>
+                
                 <p  style="margin-bottom: 2rem;">These are your profile details</p>
                 <FloatLabel>
                 <InputText type="text" placeholder="Name" v-model="userData.nome" :disabled="notEditable"></InputText>
                 <label for="username">Name</label>
-    
+     
             </FloatLabel>
                 <div class="col-12 mb-2 lg:col-12 lg:mb-0"></div>
 
@@ -61,6 +62,7 @@
 </template>
 
 <script setup>
+
 import { ref, onMounted } from 'vue';
 import axios from 'axios';
 import 'primeicons/primeicons.css'

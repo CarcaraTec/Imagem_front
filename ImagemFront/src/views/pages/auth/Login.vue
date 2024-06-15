@@ -37,7 +37,6 @@ const email = ref('');
 const password = ref('');
 const checked = ref(false);
 const router = useRouter();
-const toast = useToast();
 
 const logoUrl = computed(() => {
     return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
