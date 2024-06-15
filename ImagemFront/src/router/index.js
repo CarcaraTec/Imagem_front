@@ -14,6 +14,11 @@ const router = createRouter({
                     component: () => import('@/views/Dashboard.vue')
                 },
                 {
+                    path: '/term',
+                    name: 'term',
+                    component: () => import('@/views/pages/auth/AcceptTerm.vue')
+                },
+                {
                     path: '/user-management',
                     name: 'user-management',
                     component: () => import('@/views/pages/UserAccept.vue')
@@ -37,12 +42,12 @@ const router = createRouter({
                     path: '/uikit/menu/TypeTraveler',
                     name: 'type-traveler',
                     component: () => import('@/views/UiKit/menu/TypeTraveler.vue')
-                  },
-                  {
+                },
+                {
                     path: '/uikit/TypeHotel',
                     name: 'type-hotel',
                     component: () => import('@/views/uikit/TypeHotel.vue')
-                  },
+                },
                 {
                     path: '/uikit/floatlabel',
                     name: 'floatlabel',
@@ -160,7 +165,7 @@ const router = createRouter({
                     name: 'documentation',
                     component: () => import('@/views/Utilities/Documentation.vue')
                 },
-              
+
             ]
         },
         {
@@ -172,6 +177,11 @@ const router = createRouter({
             path: '/pages/notfound',
             name: 'notfound',
             component: () => import('@/views/Pages/NotFound.vue')
+        },
+        {
+            path: '/term',
+            name: 'term',
+            component: () => import('@/views/pages/auth/AcceptTerm.vue')
         },
         {
             path: '/auth/login',
