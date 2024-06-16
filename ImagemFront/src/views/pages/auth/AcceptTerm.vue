@@ -34,14 +34,14 @@ async function assinarContrato() {
             selectedItems.value,
             {
                 headers: {
-                    'Authorization': 'Bearer ' + user.dadosLogin.token
+                    'Authorization': 'Bearer ' + user.token
                 }
             }
         );
-        console.log(response.data);
         toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
-        JSON.parse(localStorage.removeItem('userData'));
-        router.push('/auth/login');
+        console.log(response.data)
+        localStorage.setItem('userData', JSON.stringify(response.data));
+        router.push('/');
     } catch (error) {
         console.error('Erro ao atualizar usuário:', error);
     }

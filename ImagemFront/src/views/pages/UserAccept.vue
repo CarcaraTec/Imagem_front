@@ -1,100 +1,3 @@
-<template>
-    <div>
-        <h1>Pending User Approvals</h1>
-        <p>Below is a list of users awaiting approval. Review their details and click "Approve" to grant them access to
-            the system.</p>
-
-        Active <Checkbox change="listarUsuarios" v-model="checkedActive" :binary="true"/>
-        Pending <Checkbox v-model="checkedPending" :binary="true" />
-
-
-        <DataTable :value="products" tableStyle="min-width: 50rem">
-            <Column field="user_id" header="ID"></Column>
-            <Column field="nome" header="Name"></Column>
-            <Column field="telefone" header="Phone"></Column>
-            <Column field="email" header="Email"></Column>
-            <Column field="status" header="Status"></Column>
-            <Column header="Action">
-                <template #body="slotProps">
-                    <div v-if="slotProps.data.status === 'AGUARDANDO'">
-                        <Button icon="pi pi-times" severity="danger" aria-label="Cancel"
-                            @click="ativarUsuario(slotProps.data.user_id, 'Recusado')"
-                            style="margin-right: 10px;"></Button>
-                        <Button icon="pi pi-check" aria-label="Submit"
-                            @click="ativarUsuario(slotProps.data.user_id, 'Aceito')"></Button>
-                    </div>
-                    <div v-else-if="slotProps.data.status === 'ATIVO'">
-                        <Button icon="pi pi-pencil" severity="warning" aria-label="Revoke"
-                            @click="abrirModal(slotProps.data.user_id)" style="margin-right: 10px;"></Button>
-                    </div>
-                    <div v-else>
-                        <span>No actions available</span>
-                    </div>
-                </template>
-            </Column>
-        </DataTable>
-
-        <!-- Modal -->
-        <Dialog header="Edit User" :visible="isModalVisible" @hide="fecharModal">
-            <div>
-                <div v-if="userData">
-                    <div class="grid formgrid">
-                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                            <h5>User {{ userData.nome }}</h5>
-                        </div>
-                    </div>
-
-                    <p style="margin-bottom: 2rem;">Here you can edit this user</p>
-                    <FloatLabel>
-                        <InputText type="text" placeholder="Name" v-model="userData.nome" :disabled="notEditable">
-                        </InputText>
-                        <label for="username">Name</label>
-
-                    </FloatLabel>
-                    <div class="col-12 mb-2 lg:col-12 lg:mb-0"></div>
-
-                    <div class="grid formgrid">
-                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                            <FloatLabel>
-                                <InputText type="text" placeholder="CPF" v-model="userData.cpf" :disabled="notEditable">
-                                </InputText>
-                                <label for="username">CPF</label>
-                            </FloatLabel>
-                        </div>
-                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                            <FloatLabel>
-                                <InputText type="text" placeholder="E-mail" v-model="userData.email"
-                                    :disabled="notEditable" />
-                                <label for="username">E-mail</label>
-                            </FloatLabel>
-                        </div>
-                    </div>
-                    <div class="grid formgrid" style="margin-top: 2rem;">
-                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                            <FloatLabel>
-                                <InputText type="text" placeholder="Username" v-model="userData.username"
-                                    :disabled="notEditable" />
-                                <label for="username">Username</label>
-                            </FloatLabel>
-                        </div>
-                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
-                            <FloatLabel>
-                                <InputText type="text" placeholder="Phone" v-model="userData.telefone"
-                                    :disabled="notEditable" />
-                                <label for="username">Phone</label>
-                            </FloatLabel>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
-    <Button label="Fechar" @click="fecharModal" />
-    <Button id="invisibleButton" label="Submit" @click="atualizarUsuario()" />
-</div>
-
-        </Dialog>
-    </div>
-</template>
 
 
 
@@ -237,3 +140,102 @@ onMounted( () => {
     listarUsuarios();
 });
 </script>
+
+<template>
+    <div>
+        <h1>Pending User Approvals</h1>
+        <p>Below is a list of users awaiting approval. Review their details and click "Approve" to grant them access to
+            the system.</p>
+
+        Active <Checkbox change="listarUsuarios" v-model="checkedActive" :binary="true"/>
+        Pending <Checkbox v-model="checkedPending" :binary="true" />
+
+
+        <DataTable :value="products" tableStyle="min-width: 50rem">
+            <Column field="user_id" header="ID"></Column>
+            <Column field="nome" header="Name"></Column>
+            <Column field="telefone" header="Phone"></Column>
+            <Column field="email" header="Email"></Column>
+            <Column field="status" header="Status"></Column>
+            <Column header="Action">
+                <template #body="slotProps">
+                    <div v-if="slotProps.data.status === 'AGUARDANDO'">
+                        <Button icon="pi pi-times" severity="danger" aria-label="Cancel"
+                            @click="ativarUsuario(slotProps.data.user_id, 'Recusado')"
+                            style="margin-right: 10px;"></Button>
+                        <Button icon="pi pi-check" aria-label="Submit"
+                            @click="ativarUsuario(slotProps.data.user_id, 'Aceito')"></Button>
+                    </div>
+                    <div v-else-if="slotProps.data.status === 'ATIVO'">
+                        <Button icon="pi pi-pencil" severity="warning" aria-label="Revoke"
+                            @click="abrirModal(slotProps.data.user_id)" style="margin-right: 10px;"></Button>
+                    </div>
+                    <div v-else>
+                        <span>No actions available</span>
+                    </div>
+                </template>
+            </Column>
+        </DataTable>
+
+        <!-- Modal -->
+        <Dialog header="Edit User" :visible="isModalVisible" @hide="fecharModal">
+            <div>
+                <div v-if="userData">
+                    <div class="grid formgrid">
+                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                            <h5>User {{ userData.nome }}</h5>
+                        </div>
+                    </div>
+
+                    <p style="margin-bottom: 2rem;">Here you can edit this user</p>
+                    <FloatLabel>
+                        <InputText type="text" placeholder="Name" v-model="userData.nome" :disabled="notEditable">
+                        </InputText>
+                        <label for="username">Name</label>
+
+                    </FloatLabel>
+                    <div class="col-12 mb-2 lg:col-12 lg:mb-0"></div>
+
+                    <div class="grid formgrid">
+                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                            <FloatLabel>
+                                <InputText type="text" placeholder="CPF" v-model="userData.cpf" :disabled="notEditable">
+                                </InputText>
+                                <label for="username">CPF</label>
+                            </FloatLabel>
+                        </div>
+                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                            <FloatLabel>
+                                <InputText type="text" placeholder="E-mail" v-model="userData.email"
+                                    :disabled="notEditable" />
+                                <label for="username">E-mail</label>
+                            </FloatLabel>
+                        </div>
+                    </div>
+                    <div class="grid formgrid" style="margin-top: 2rem;">
+                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                            <FloatLabel>
+                                <InputText type="text" placeholder="Username" v-model="userData.username"
+                                    :disabled="notEditable" />
+                                <label for="username">Username</label>
+                            </FloatLabel>
+                        </div>
+                        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+                            <FloatLabel>
+                                <InputText type="text" placeholder="Phone" v-model="userData.telefone"
+                                    :disabled="notEditable" />
+                                <label for="username">Phone</label>
+                            </FloatLabel>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+    <Button label="Fechar" @click="fecharModal" />
+    <Button id="invisibleButton" label="Submit" @click="atualizarUsuario()" />
+</div>
+
+        </Dialog>
+    </div>
+</template>
+

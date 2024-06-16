@@ -2,13 +2,13 @@
 import { useRouter } from 'vue-router';
 const router = useRouter();
 const user = JSON.parse(localStorage.getItem('userData'));
-if(user == null){
+if (user == null) {
     router.push('/auth/login');
-} else if ('dadosLogin' in user) {
-            router.push('/term');
-        }else{
-            router.push('/');
-        }
+} else if ('termo' in user) {
+    router.push('/term');
+} else {
+    router.push('/');
+}
 </script>
 
 <template>

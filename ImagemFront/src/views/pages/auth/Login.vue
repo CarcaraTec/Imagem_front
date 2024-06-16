@@ -21,6 +21,7 @@ async function login(email, password) {
             login: email,
             password: password
         });
+
         return response.data;
     } catch (error) {
         console.error("Error fetching data:", error);
@@ -31,14 +32,15 @@ async function login(email, password) {
 async function handleLogin(email, password) {
     try {
         const averageScore = await login(email, password);
-        console.log(averageScore)
+        console.log(averageScore.role)
         storeUserData(averageScore);
 
-        if ('dadosLogin' in averageScore.value) {
-            router.push('/term');
-        }else{
+        if (averageScore.role !== 'aceitetermo') {
             router.push('/');
+        } else {
+            router.push('/term');
         }
+
     } catch (error) {
         console.error("Login error:", error);
     }
