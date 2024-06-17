@@ -4,7 +4,7 @@ const router = useRouter();
 const user = JSON.parse(localStorage.getItem('userData'));
 if (user == null) {
     router.push('/auth/login');
-} else if ('termo' in user) {
+} else if (user.role == 'ACEITETERMO') {
     router.push('/term');
 } else {
     router.push('/');

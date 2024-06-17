@@ -13,6 +13,10 @@ import Column from 'primevue/column';
 import Dialog from 'primevue/dialog';
 import { useToast } from "primevue/usetoast";
 import axios from 'axios';
+import { useRouter } from 'vue-router';
+
+const router = useRouter();
+
 const userData = ref(null);
 const checkedActive = ref(3);
 const checkedPending = ref(true);
