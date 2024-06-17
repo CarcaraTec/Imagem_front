@@ -6,6 +6,8 @@ import { usePrimeVue } from 'primevue/config';
 import Menu from 'primevue/menu';
 import 'primeicons/primeicons.css'
 import { useToast } from "primevue/usetoast";
+import PredictComponent from "./PredictComponent.vue";
+
 const user = JSON.parse(localStorage.getItem('userData'));
 const { layoutConfig, onMenuToggle } = useLayout();
 
@@ -126,13 +128,13 @@ const toggle = (event) => {
         <button class="p-link layout-menu-button layout-topbar-button" @click="onMenuToggle()">
             <i class="pi pi-bars"></i>
         </button>
+        <PredictComponent />
 
         <button class="p-link layout-topbar-menu-button layout-topbar-button" @click="onTopBarMenuButton()">
             <i class="pi pi-ellipsis-v"></i>
         </button>
 
         <div class="layout-topbar-menu" :class="topbarMenuClasses">
-
             <ToggleButton v-model="checked" class="w-6rem" :onLabel="darkMode ? 'Dark' : 'White'"
                 :offLabel="darkMode ? 'Dark' : 'White'" @update:modelValue="onDarkModeChange" />
                 
