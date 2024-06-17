@@ -46,7 +46,7 @@
   }
   .result-label {
     margin-left: 10px;
-    color: #333;
+    color: #999;
   }
   .predict-div {
     margin-left: 5%;
