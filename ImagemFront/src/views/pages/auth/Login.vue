@@ -1,19 +1,18 @@
 <script setup>
 import { useRouter } from 'vue-router';
 import { useLayout } from '@/layout/composables/layout';
-import { ref, computed } from 'vue';
+import { ref } from 'vue';
 import axios from "axios";
 import storeUserData from '@/stores/auth';
+import { useToast } from "primevue/usetoast";
+const toast = useToast();
+
 
 const { layoutConfig } = useLayout();
 const email = ref('');
 const password = ref('');
 const checked = ref(false);
 const router = useRouter();
-
-const logoUrl = computed(() => {
-    return `/layout/images/${layoutConfig.darkTheme.value ? 'logo-white' : 'logo-dark'}.svg`;
-});
 
 async function login(email, password) {
     try {
@@ -24,7 +23,7 @@ async function login(email, password) {
 
         return response.data;
     } catch (error) {
-        console.error("Error fetching data:", error);
+        console.log("Error fetching data:");
         throw error;
     }
 }
@@ -42,7 +41,9 @@ async function handleLogin(email, password) {
         }
 
     } catch (error) {
-        console.error("Login error:", error);
+        alert(error.response.data.mensagem);
+        toast.add({ severity: 'error', summary: 'Error Message', detail: error.response.data.mensagem, life: 3000 });
+        console.log(error.response.data.mensagem);
     }
 }
 

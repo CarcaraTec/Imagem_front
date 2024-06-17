@@ -43,6 +43,7 @@ async function assinarContrato() {
         localStorage.setItem('userData', JSON.stringify(response.data));
         router.push('/');
     } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
         console.error('Erro ao atualizar usuário:', error);
     }
 }
