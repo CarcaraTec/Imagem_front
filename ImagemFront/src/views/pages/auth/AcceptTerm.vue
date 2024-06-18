@@ -48,6 +48,28 @@ async function assinarContrato() {
     }
 }
 
+async function atualizarContrato() {
+    try {
+        const response = await axios.post(
+            'http://localhost:8080/itensTermo/atualizar-itens',
+            selectedItems.value,
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + user.token
+                }
+            }
+        );
+        toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
+        console.log(response.data)
+        localStorage.setItem('userData', JSON.stringify(response.data));
+        router.push('/');
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
+        console.error('Erro ao atualizar usuário:', error);
+    }
+}
+const selectedItemsIds = ref([53, 3]);
+
 function handleCheckboxChange(checked, idItem) {
     if (checked) {
         selectedItems.value.push(idItem);
@@ -60,6 +82,20 @@ function handleCheckboxChange(checked, idItem) {
     console.log('Itens selecionados:', selectedItems.value); // Para depuração
 };
 
+async function carregarItensAtuais(){
+    try {
+        const response = await axios.get('http://localhost:8080/itensTermo/itens-aceitos', {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }});
+        selectedItemsIds.value = response.data.map(item => item.idItem);
+
+        console.log(response)
+        console.log(termo.value)
+    } catch (error) {
+        console.error('Erro ao fazer requisição:', error);
+    }
+}
 onMounted(async () => {
     try {
         const response = await axios.get('http://localhost:8080/termo/ultimo-termo');
@@ -68,6 +104,9 @@ onMounted(async () => {
         console.log(termo.value)
     } catch (error) {
         console.error('Erro ao fazer requisição:', error);
+    }
+    if(user.role=='user'){
+        carregarItensAtuais();
     }
 });
 </script>
@@ -145,9 +184,8 @@ onMounted(async () => {
                     <div class="mt-10">
                         <slot name="confirm-box">
                             <div v-for="(item, index) in termo.itens" :key="item.idItem" style="margin-bottom: 5px;">
-                                <Checkbox v-model="item.checked" :input-id="'confirm-' + index"
-                                    :name="'confirmSigning-' + index" :value="true"
-                                    @change="() => handleCheckboxChange(item.checked, item.idItem)" />
+                                <Checkbox v-model="selectedItemsIds" :input-id="'confirm-' + index"
+                                    :name="'confirmSigning-' + index" :value="item.idItem" />
                                 <label :for="'confirm-' + index" class="ml-2">
                                     {{ item.descricao }}
                                 </label>
@@ -161,7 +199,10 @@ onMounted(async () => {
             <Button label="Voltar" rounded type="button" outlined
                 @click="router.push({ name: 'createAccountStep2' })" />
 
-            <Button label="Assinar contrato" type="button" rounded @click="assinarContrato" />
+            <Button v-if="user.role === 'aceitetermo'" label="Assinar contrato" type="button" rounded
+                @click="assinarContrato" />
+            <Button v-else-if="user.role === 'user'" label="Assinar contrato" type="button" rounded
+                @click="atualizarContrato" />
         </div>
     </div>
 </template>

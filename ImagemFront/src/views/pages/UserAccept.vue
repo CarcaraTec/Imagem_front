@@ -29,7 +29,7 @@ const user = JSON.parse(localStorage.getItem('userData'));
 
 // Funções
 function removeProductById(id) {
-    products.value = products.value.filter(product => product.user_id !== id);
+    products.value = products.value.filter(product => product.userId !== id);
 }
 
 function abrirModal(userId) {
@@ -71,7 +71,6 @@ async function buscarUsuario(userId) {
                 'Authorization': 'Bearer ' + user.token
             }
         });
-
         userData.value = response.data;
         console.log(userData.value)
     } catch (error) {
@@ -81,7 +80,7 @@ async function buscarUsuario(userId) {
 
 async function atualizarUsuario() {
     const dadosUsuario = {
-        userId: userData.value.user_id,
+        userId: userData.value.userId,
         nome: userData.value.nome,
         cpf: userData.value.cpf,
         email: userData.value.email,
@@ -97,7 +96,7 @@ async function atualizarUsuario() {
             {
                 headers: {
                     'Authorization': 'Bearer ' + user.token
-                }
+                }   
             }
         );
         console.log(response.data);
@@ -156,7 +155,7 @@ onMounted( () => {
 
 
         <DataTable :value="products" tableStyle="min-width: 50rem">
-            <Column field="user_id" header="ID"></Column>
+            <Column field="userId" header="ID"></Column>
             <Column field="nome" header="Name"></Column>
             <Column field="telefone" header="Phone"></Column>
             <Column field="email" header="Email"></Column>
@@ -165,14 +164,14 @@ onMounted( () => {
                 <template #body="slotProps">
                     <div v-if="slotProps.data.status === 'AGUARDANDO'">
                         <Button icon="pi pi-times" severity="danger" aria-label="Cancel"
-                            @click="ativarUsuario(slotProps.data.user_id, 'Recusado')"
+                            @click="ativarUsuario(slotProps.data.userId, 'Recusado')"
                             style="margin-right: 10px;"></Button>
                         <Button icon="pi pi-check" aria-label="Submit"
-                            @click="ativarUsuario(slotProps.data.user_id, 'Aceito')"></Button>
+                            @click="ativarUsuario(slotProps.data.userId, 'Aceito')"></Button>
                     </div>
                     <div v-else-if="slotProps.data.status === 'ATIVO'">
                         <Button icon="pi pi-pencil" severity="warning" aria-label="Revoke"
-                            @click="abrirModal(slotProps.data.user_id)" style="margin-right: 10px;"></Button>
+                            @click="abrirModal(slotProps.data.userId)" style="margin-right: 10px;"></Button>
                     </div>
                     <div v-else>
                         <span>No actions available</span>
@@ -180,8 +179,7 @@ onMounted( () => {
                 </template>
             </Column>
         </DataTable>
-
-        <!-- Modal -->
+        
         <Dialog header="Edit User" :visible="isModalVisible" @hide="fecharModal">
             <div>
                 <div v-if="userData">
@@ -211,7 +209,7 @@ onMounted( () => {
                         <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                             <FloatLabel>
                                 <InputText type="text" placeholder="E-mail" v-model="userData.email"
-                                    :disabled="notEditable" />
+                                    :disabled=true />
                                 <label for="username">E-mail</label>
                             </FloatLabel>
                         </div>
