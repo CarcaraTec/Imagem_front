@@ -29,9 +29,9 @@ const selectedItems = ref([]);
 
 async function assinarContrato() {
     try {
-        const response = await axios.post(
+        await axios.post(
             'http://localhost:8080/itensTermo/aceitar',
-            selectedItems.value,
+            selectedItemsIds.value,
             {
                 headers: {
                     'Authorization': 'Bearer ' + user.token
@@ -39,8 +39,8 @@ async function assinarContrato() {
             }
         );
         toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
-        console.log(response.data)
-        localStorage.setItem('userData', JSON.stringify(response.data));
+        user.role = 'user';
+        localStorage.setItem('userData', JSON.stringify(user));
         router.push('/');
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
@@ -52,7 +52,7 @@ async function atualizarContrato() {
     try {
         const response = await axios.post(
             'http://localhost:8080/itensTermo/atualizar-itens',
-            selectedItems.value,
+            selectedItemsIds.value,
             {
                 headers: {
                     'Authorization': 'Bearer ' + user.token
@@ -60,26 +60,31 @@ async function atualizarContrato() {
             }
         );
         toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
-        console.log(response.data)
-        localStorage.setItem('userData', JSON.stringify(response.data));
+        user.role = 'user';
+        localStorage.setItem('userData', JSON.stringify(user));
         router.push('/');
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
         console.error('Erro ao atualizar usuário:', error);
     }
 }
-const selectedItemsIds = ref([53, 3]);
+const selectedItemsIds = ref([]);
 
-function handleCheckboxChange(checked, idItem) {
-    if (checked) {
-        selectedItems.value.push(idItem);
+function handleCheckboxChange(event, idItem) {
+    const isChecked = event.target.checked;
+
+    console.log(isChecked +" "+ idItem)
+    if (isChecked) {
+        // selectedItemsIds.value.push(idItem);
     } else {
-        const index = selectedItems.value.indexOf(idItem);
+        const index = selectedItemsIds.value.indexOf(idItem);
+        console.log(index);
+
         if (index > -1) {
-            selectedItems.value.splice(index, 1);
+            selectedItemsIds.value.splice(index, 1);
         }
     }
-    console.log('Itens selecionados:', selectedItems.value); // Para depuração
+    console.log('Itens selecionados:', selectedItemsIds.value); // Para depuração
 };
 
 async function carregarItensAtuais(){
@@ -88,25 +93,22 @@ async function carregarItensAtuais(){
             headers: {
                 'Authorization': 'Bearer ' + user.token
             }});
-        selectedItemsIds.value = response.data.map(item => item.idItem);
-
-        console.log(response)
-        console.log(termo.value)
+        return response.data.map(item => item.idItem);
     } catch (error) {
         console.error('Erro ao fazer requisição:', error);
     }
 }
+
 onMounted(async () => {
     try {
         const response = await axios.get('http://localhost:8080/termo/ultimo-termo');
         termo.value = response.data;
-        console.log(response)
-        console.log(termo.value)
     } catch (error) {
         console.error('Erro ao fazer requisição:', error);
     }
     if(user.role=='user'){
-        carregarItensAtuais();
+        selectedItemsIds.value = await carregarItensAtuais();
+        console.log('Itens selecionados:', selectedItemsIds.value); // Para depuração
     }
 });
 </script>
@@ -185,7 +187,7 @@ onMounted(async () => {
                         <slot name="confirm-box">
                             <div v-for="(item, index) in termo.itens" :key="item.idItem" style="margin-bottom: 5px;">
                                 <Checkbox v-model="selectedItemsIds" :input-id="'confirm-' + index"
-                                    :name="'confirmSigning-' + index" :value="item.idItem" />
+                                    :name="'confirmSigning-' + index" @change="handleCheckboxChange($event, item.idItem)" :value="item.idItem" />
                                 <label :for="'confirm-' + index" class="ml-2">
                                     {{ item.descricao }}
                                 </label>
