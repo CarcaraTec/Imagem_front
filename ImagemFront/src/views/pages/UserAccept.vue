@@ -1,7 +1,3 @@
-
-
-
-
 <script setup>
 import 'primeicons/primeicons.css'
 
@@ -14,6 +10,7 @@ import Dialog from 'primevue/dialog';
 import { useToast } from "primevue/usetoast";
 import axios from 'axios';
 import { useRouter } from 'vue-router';
+import MultiSelect from 'primevue/multiselect';
 
 const router = useRouter();
 
@@ -23,9 +20,19 @@ const checkedPending = ref(true);
 
 // Variáveis reativas
 const isModalVisible = ref(false);
+const isModalVisibleWebHook = ref(false);
+
 const products = ref([]);  // Inicializando com um array vazio
 const toast = useToast();
 const user = JSON.parse(localStorage.getItem('userData'));
+
+const url = ref(null);
+const selectedActions = ref();
+const action = ref([
+    { name: 'Create User', code: 'CU' },
+    { name: 'Update User', code: 'UU' },
+    { name: 'Delete User', code: 'DU' }
+]);
 
 // Funções
 function removeProductById(id) {
@@ -38,13 +45,24 @@ function abrirModal(userId) {
     isModalVisible.value = true;
 }
 
+function abrirCriacaoWebHook(userId) {
+    console.log('User ID:', userId); // Apenas para verificar se o ID está sendo passado corretamente
+    isModalVisibleWebHook.value = true;
+}
+
+
 function fecharModal() {
     isModalVisible.value = false;
 }
 
+function fecharCriacaoWebHook() {
+    isModalVisibleWebHook.value = false;
+    selectedActions.value = [];
+}
+
 async function ativarUsuario(idUsuario, status) {
     try {
-        const response = await axios.put(
+        await axios.put(
             `http://localhost:8080/user/updateStatus${status}?id=${idUsuario}`,
             {},
             {
@@ -96,11 +114,10 @@ async function atualizarUsuario() {
             {
                 headers: {
                     'Authorization': 'Bearer ' + user.token
-                }   
+                }
             }
         );
         console.log(response.data);
-        desabilitarEdicao();
         toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
 
     } catch (error) {
@@ -112,16 +129,16 @@ async function listarUsuarios() {
     try {
         // Montar a URL com base nos valores de checkedActive e checkedPending
         let url = 'http://localhost:8080/user/listar';
-        
+
         if (!(checkedActive.value && checkedPending.value)) {
             const params = new URLSearchParams();
-            
+
             if (checkedActive.value) {
                 params.append('status', 'active');
             } else if (checkedPending.value) {
                 params.append('status', 'pending');
             }
-            
+
             url += `?${params.toString()}`;
         }
 
@@ -138,20 +155,62 @@ async function listarUsuarios() {
     }
 }
 
+async function listarActions(){
+    try {
+        const response = await axios.get('http://localhost:8080/sharing', {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
+        action.value = response.data;
+    } catch (error) {
+        console.error('Erro ao buscar os dados:', error);
+    }
+}
+
+async function criarWebhook(){
+    try {
+        const payload = {
+            url: this.url, // Certifique-se de que 'url' está corretamente definido no seu componente
+            actions: this.selectedActions.map(item => item.id) // Certifique-se de que 'selectedActions' está correto
+        };
+        
+        console.log('Payload:', JSON.stringify(payload)); // Log para ver o que está sendo enviado
+
+        await axios.post(
+            'http://localhost:8080/sharing/create-webhook',
+            payload,
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + user.token // Certifique-se de que 'user' e 'token' estão definidos
+                }
+            }
+        );
+        
+        this.toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
+    } catch (error) {
+        this.toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
+        console.error('Erro ao atualizar usuário:', error);
+    }
+}
+
 // Lifecycle hooks
-onMounted( () => {
+onMounted(() => {
     listarUsuarios();
+    listarActions();
 });
 </script>
 
 <template>
     <div>
-        <h1>Pending User Approvals</h1>
+        <h1>Users</h1>
         <p>Below is a list of users awaiting approval. Review their details and click "Approve" to grant them access to
             the system.</p>
 
-        Active <Checkbox change="listarUsuarios" v-model="checkedActive" :binary="true"/>
-        Pending <Checkbox v-model="checkedPending" :binary="true" />
+        Active
+        <Checkbox change="listarUsuarios" v-model="checkedActive" :binary="true" />
+        Pending
+        <Checkbox v-model="checkedPending" :binary="true" />
 
 
         <DataTable :value="products" tableStyle="min-width: 50rem">
@@ -179,7 +238,7 @@ onMounted( () => {
                 </template>
             </Column>
         </DataTable>
-        
+
         <Dialog header="Edit User" :visible="isModalVisible" @hide="fecharModal">
             <div>
                 <div v-if="userData">
@@ -208,8 +267,7 @@ onMounted( () => {
                         </div>
                         <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                             <FloatLabel>
-                                <InputText type="text" placeholder="E-mail" v-model="userData.email"
-                                    :disabled=true />
+                                <InputText type="text" placeholder="E-mail" v-model="userData.email" :disabled=true />
                                 <label for="username">E-mail</label>
                             </FloatLabel>
                         </div>
@@ -233,11 +291,35 @@ onMounted( () => {
                 </div>
             </div>
             <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
-    <Button label="Fechar" @click="fecharModal" />
-    <Button id="invisibleButton" label="Submit" @click="atualizarUsuario()" />
-</div>
+                <Button label="Fechar" @click="fecharModal" />
+                <Button id="invisibleButton" label="Submit" @click="atualizarUsuario()" />
+            </div>
 
         </Dialog>
     </div>
-</template>
 
+    <h1>API</h1>
+    <p>Create webhook to share data.</p>
+    <Button label="Create Webhook" @click="abrirCriacaoWebHook()" />
+    <Dialog header="Webhook data" :visible="isModalVisibleWebHook" @hide="fecharModal">
+        <div class="col-12 mb-2 lg:col-12 lg:mb-0">
+            <p>Action to audite</p>
+            <MultiSelect v-model="selectedActions" :options="action" optionLabel="action" filter
+                placeholder="Select Actions" :maxSelectedLabels="3" class="w-full md:w-80" />
+        </div>
+
+
+        <div class="col-12 mb-2 lg:col-6 lg:mb-0">
+        <p>URL</p>
+
+            <InputText type="text" placeholder="URL" v-model="url">
+            </InputText>
+        </div>
+
+        <div style="display: flex; justify-content: space-between; margin-top: 1rem;">
+            <Button label="Fechar" @click="fecharCriacaoWebHook" />
+            <Button id="invisibleButton" label="Submit" @click="criarWebhook()" />
+        </div>
+    </Dialog>
+
+</template>
