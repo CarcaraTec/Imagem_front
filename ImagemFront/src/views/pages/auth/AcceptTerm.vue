@@ -98,6 +98,19 @@ async function carregarItensAtuais(){
         console.error('Erro ao fazer requisição:', error);
     }
 }
+async function deleteAccount(){
+    try {
+        await axios.delete('http://localhost:8080/user/delete-account', {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao buscar os dados:', error);
+    }
+    localStorage.removeItem('userData');
+    router.push('/auth/login')
+}
 
 onMounted(async () => {
     try {
@@ -198,8 +211,11 @@ onMounted(async () => {
             </CardComponent>
         </div>
         <div class="flex justify-between mt-10" style="display: flex; margin: 0% 30%; justify-content: space-between;">
-            <Button label="Voltar" rounded type="button" outlined
-                @click="router.push({ name: 'createAccountStep2' })" />
+            <Button v-if="user.role === 'aceitetermo'" label="Não aceitar" rounded type="button" outlined
+                @click="router.push(deleteAccount())" />
+
+                <Button v-if="user.role === 'user'" label="Voltar" rounded type="button" outlined
+                @click="router.push('/')" />
 
             <Button v-if="user.role === 'aceitetermo'" label="Assinar contrato" type="button" rounded
                 @click="assinarContrato" />

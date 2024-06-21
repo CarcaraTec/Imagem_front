@@ -177,7 +177,7 @@ async function criarWebhook(){
         
         console.log('Payload:', JSON.stringify(payload)); // Log para ver o que está sendo enviado
 
-        await axios.post(
+        const response = await axios.post(
             'http://localhost:8080/sharing/create-webhook',
             payload,
             {
@@ -187,7 +187,7 @@ async function criarWebhook(){
             }
         );
         
-        this.toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
+        this.toast.add({ severity: 'success', summary: 'Success', detail: 'Create with token: '+response.data, life: 3000 });
     } catch (error) {
         this.toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
         console.error('Erro ao atualizar usuário:', error);

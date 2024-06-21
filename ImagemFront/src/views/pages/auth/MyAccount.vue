@@ -97,7 +97,7 @@ async function deleteAccount(){
 }
 
 function visualizarTermo(){
-    router.push('/terms')
+    router.push('/term')
 }
 
 onMounted(async () => {
