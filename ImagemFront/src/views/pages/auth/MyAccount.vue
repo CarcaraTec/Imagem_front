@@ -95,6 +95,11 @@ async function deleteAccount(){
     localStorage.removeItem('userData');
     router.push('/auth/login')
 }
+
+function visualizarTermo(){
+    router.push('/term')
+}
+
 onMounted(async () => {
     try {
         const response = await axios.get('http://localhost:8080/user/buscar/' + user.userId, {
@@ -118,9 +123,12 @@ onMounted(async () => {
                         <h5>Hello {{ userData.nome }}</h5>
                     </div>
                     <div class="col-12 mb-2 lg:col-6 lg:mb-0 parent-container">
-                        <Button rounded severity="info" type="button" label="Edit" icon="pi pi-user-edit"
+                        <Button rounded severity="info" type="button" label="View Term" icon="pi pi-eye"
+                            :loading="loading" @click="visualizarTermo()" class="small-button" />
+                            <Button rounded severity="info" type="button" label="Edit" icon="pi pi-user-edit"
                             :loading="loading" @click="habilitarEdicao()" class="small-button" />
                     </div>
+                    
                 </div>
                 
                 <p  style="margin-bottom: 2rem;">These are your profile details</p>
@@ -141,7 +149,7 @@ onMounted(async () => {
                     </div>
                     <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                         <FloatLabel>
-                        <InputText type="text" placeholder="E-mail" v-model="userData.email" :disabled="notEditable" />
+                        <InputText type="text" placeholder="E-mail" v-model="userData.email" :disabled=true />
                         <label for="username">E-mail</label>
                     </FloatLabel>
                     </div>
@@ -150,7 +158,7 @@ onMounted(async () => {
                     <div class="col-12 mb-2 lg:col-6 lg:mb-0">
                         <FloatLabel>
                             <InputText type="text" placeholder="Username" v-model="userData.username"
-                                :disabled="notEditable" />
+                                :disabled=true />
                                 <label for="username">Username</label>
                         </FloatLabel>
                     </div>

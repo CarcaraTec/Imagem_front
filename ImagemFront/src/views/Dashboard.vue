@@ -14,11 +14,6 @@ import ChartTypesGuests from '../components/ChartTypesGuests.vue';
 
 const { isDarkTheme } = useLayout();
 
-const products = ref(null);
-const positives = ref(null);
-const negatives = ref(null);
-const neutrals = ref(null);
-const satisfactionIndex = ref(null);
 
 
 const usuario = localStorage.getItem('usuario');
@@ -66,17 +61,9 @@ onMounted(async () => {
     try {
         chartData.value = setChartData();
         chartOptions.value = setChartOptions();
-        const response = await axios.get('http://127.0.0.1:5000/calculos/cards');
-        console.log(response);
         // const response2 = await axios.get('http://127.0.0.1:5000/graficos/');
-        const response3 = await axios.get('http://127.0.0.1:5000/graficos/comentarios');
 
         console.log(graph.value.Neutral.map(value => Number(value)));
-        products.value = response.data;
-        positives.value = response.data.Positive;
-        negatives.value = response.data.Negative;
-        neutrals.value = response.data.Neutral;
-        satisfactionIndex.value = response.data.SatisfactionIndex.toFixed(1);
     } catch (error) {
         console.error('Erro ao fazer requisição:', error);
     }
@@ -263,10 +250,6 @@ watch(
     },
     { immediate: true }
 );
-const openModal = (rowData) => {
-    selectedHotel.value = rowData;
-    showModal.value = true;
-};
 </script>
 
 <template>
@@ -276,7 +259,7 @@ const openModal = (rowData) => {
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Positives</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ positives }}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">39478</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-green-100 border-round"
                         style="width: 2.5rem; height: 2.5rem">
@@ -289,7 +272,7 @@ const openModal = (rowData) => {
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Negatives</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ negatives }}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">6010</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-red-100 border-round"
                         style="width: 2.5rem; height: 2.5rem">
@@ -302,7 +285,7 @@ const openModal = (rowData) => {
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Neutrals</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ neutrals }}</div>
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">26151</div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-yellow-100 border-round"
                         style="width: 2.5rem; height: 2.5rem">
@@ -315,7 +298,7 @@ const openModal = (rowData) => {
                 <div class="flex justify-content-between mb-3">
                     <div>
                         <span class="block text-500 font-medium mb-3">Satisfaction Index</span>
-                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">{{ satisfactionIndex }}%
+                        <div class="text-900 font-medium text-x1" style="font-size: 30px;">55.1%
                         </div>
                     </div>
                     <div class="flex align-items-center justify-content-center bg-blue-100 border-round"
@@ -325,34 +308,19 @@ const openModal = (rowData) => {
             </div>
         </div>
 
-        <div class="col-12 xl:col-6">
-            <div class="card">
-                <h5>Top 5 Recent Insights</h5>
-                <DataTable :value="hotels" :rows="5" :paginator="true" responsiveLayout="scroll">
-                    <Column field="hotel" header="Hotel" :sortable="true" style="width: 25%"></Column>
-                    <Column field="problem" header="Problem" :sortable="true" style="width: 25%"></Column>
-                    <Column field="recurrence" header="Recurrence" :sortable="true" style="width: 25%"></Column>
-                    <Column style="width: 15%">
-                        <template #header> Solution </template>
-                        <template #body="{ rowData }">
-                            <Button icon="pi pi-search" type="button" class="p-button-text"
-                                @click="openModal(rowData)"></Button>
-                        </template>
-                    </Column>
-                </DataTable>
-
-                <Dialog v-model="showModal" modal header="Solution Modal" :style="{ width: '50vw' }">
-                    <!-- Conteúdo do modal aqui -->
-                    <p>Modal content goes here</p>
-                </Dialog>
-            </div>
-
-        </div>
-        <div class="col-12 xl:col-6">
+        
+        <div class="col-12 xl:col-8">
             <div class="card">
                 <h5>Progression of assessments over time</h5>
                 <Chart type="line" :data="chartData" :options="chartOptions" class="h-30rem" />
             </div>
+        </div>
+        <div class="col-12 xl:col-4">
+            <div class="card">
+                <h5>Geographic Map</h5>
+                <iframe src="http://127.0.0.1:5000/mapa/calor" style="width: 100%; height: 410px; border: none;"></iframe>
+            </div>
+
         </div>
         <div class="col-12 xl:col-6">
             <div class="card">
@@ -366,23 +334,23 @@ const openModal = (rowData) => {
                 <ChartBarBadAverage />
             </div>
         </div>
-        <div class="col-12 xl:col-6 mx-auto">
-          <div class="card">
-               <h5 class="text-center">Comparative Sentiment Analysis by Travel Type (%)</h5>
-               <CharTypeTraveler/>
-         </div>
-       </div>
-       <div class="col-12 xl:col-6 mx-auto">
-          <div class="card">
-               <h5 class="text-center">Comparative Analysis by Travel Type (%)</h5>
-               <ChartTypeTraveler/>
-         </div>
-       </div>
-       <div class="col-12 xl:col-6 mx-auto">
-          <div class="card">
-               <h5 class="text-center">Comparative Analysis by Type Guests (%)</h5>
-               <ChartTypesGuests/>
-         </div>
-       </div>
+        <div class="col-12 xl:col-4 mx-auto">
+            <div class="card">
+                <h5 class="text-center">Comparative Sentiment Analysis by Travel Type (%)</h5>
+                <CharTypeTraveler />
+            </div>
+        </div>
+        <div class="col-12 xl:col-4 mx-auto">
+            <div class="card">
+                <h5 class="text-center">Comparative Analysis by Travel Type (%)</h5>
+                <ChartTypeTraveler />
+            </div>
+        </div>
+        <div class="col-12 xl:col-4 mx-auto">
+            <div class="card">
+                <h5 class="text-center">Comparative Analysis by Type Guests (%)</h5>
+                <ChartTypesGuests />
+            </div>
+        </div>
     </div>
 </template>
