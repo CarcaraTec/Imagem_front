@@ -29,9 +29,9 @@ const selectedItems = ref([]);
 
 async function assinarContrato() {
     try {
-        const response = await axios.post(
+        await axios.post(
             'http://localhost:8080/itensTermo/aceitar',
-            selectedItems.value,
+            selectedItemsIds.value,
             {
                 headers: {
                     'Authorization': 'Bearer ' + user.token
@@ -39,8 +39,8 @@ async function assinarContrato() {
             }
         );
         toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
-        console.log(response.data)
-        localStorage.setItem('userData', JSON.stringify(response.data));
+        user.role = 'user';
+        localStorage.setItem('userData', JSON.stringify(user));
         router.push('/');
     } catch (error) {
         toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
@@ -48,26 +48,80 @@ async function assinarContrato() {
     }
 }
 
-function handleCheckboxChange(checked, idItem) {
-    if (checked) {
-        selectedItems.value.push(idItem);
+async function atualizarContrato() {
+    try {
+        const response = await axios.post(
+            'http://localhost:8080/itensTermo/atualizar-itens',
+            selectedItemsIds.value,
+            {
+                headers: {
+                    'Authorization': 'Bearer ' + user.token
+                }
+            }
+        );
+        toast.add({ severity: 'success', summary: 'Success', detail: 'User updated', life: 3000 });
+        user.role = 'user';
+        localStorage.setItem('userData', JSON.stringify(user));
+        router.push('/');
+    } catch (error) {
+        toast.add({ severity: 'error', summary: 'Error Message', detail: 'Error to updated user', life: 3000 });
+        console.error('Erro ao atualizar usuário:', error);
+    }
+}
+const selectedItemsIds = ref([]);
+
+function handleCheckboxChange(event, idItem) {
+    const isChecked = event.target.checked;
+
+    console.log(isChecked +" "+ idItem)
+    if (isChecked) {
+        // selectedItemsIds.value.push(idItem);
     } else {
-        const index = selectedItems.value.indexOf(idItem);
+        const index = selectedItemsIds.value.indexOf(idItem);
+        console.log(index);
+
         if (index > -1) {
-            selectedItems.value.splice(index, 1);
+            selectedItemsIds.value.splice(index, 1);
         }
     }
-    console.log('Itens selecionados:', selectedItems.value); // Para depuração
+    console.log('Itens selecionados:', selectedItemsIds.value); // Para depuração
 };
+
+async function carregarItensAtuais(){
+    try {
+        const response = await axios.get('http://localhost:8080/itensTermo/itens-aceitos', {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }});
+        return response.data.map(item => item.idItem);
+    } catch (error) {
+        console.error('Erro ao fazer requisição:', error);
+    }
+}
+async function deleteAccount(){
+    try {
+        await axios.delete('http://localhost:8080/user/delete-account', {
+            headers: {
+                'Authorization': 'Bearer ' + user.token
+            }
+        });
+    } catch (error) {
+        console.error('Erro ao buscar os dados:', error);
+    }
+    localStorage.removeItem('userData');
+    router.push('/auth/login')
+}
 
 onMounted(async () => {
     try {
         const response = await axios.get('http://localhost:8080/termo/ultimo-termo');
         termo.value = response.data;
-        console.log(response)
-        console.log(termo.value)
     } catch (error) {
         console.error('Erro ao fazer requisição:', error);
+    }
+    if(user.role=='user'){
+        selectedItemsIds.value = await carregarItensAtuais();
+        console.log('Itens selecionados:', selectedItemsIds.value); // Para depuração
     }
 });
 </script>
@@ -145,9 +199,8 @@ onMounted(async () => {
                     <div class="mt-10">
                         <slot name="confirm-box">
                             <div v-for="(item, index) in termo.itens" :key="item.idItem" style="margin-bottom: 5px;">
-                                <Checkbox v-model="item.checked" :input-id="'confirm-' + index"
-                                    :name="'confirmSigning-' + index" :value="true"
-                                    @change="() => handleCheckboxChange(item.checked, item.idItem)" />
+                                <Checkbox v-model="selectedItemsIds" :input-id="'confirm-' + index"
+                                    :name="'confirmSigning-' + index" @change="handleCheckboxChange($event, item.idItem)" :value="item.idItem" />
                                 <label :for="'confirm-' + index" class="ml-2">
                                     {{ item.descricao }}
                                 </label>
@@ -158,10 +211,16 @@ onMounted(async () => {
             </CardComponent>
         </div>
         <div class="flex justify-between mt-10" style="display: flex; margin: 0% 30%; justify-content: space-between;">
-            <Button label="Voltar" rounded type="button" outlined
-                @click="router.push({ name: 'createAccountStep2' })" />
+            <Button v-if="user.role === 'aceitetermo'" label="Não aceitar" rounded type="button" outlined
+                @click="router.push(deleteAccount())" />
 
-            <Button label="Assinar contrato" type="button" rounded @click="assinarContrato" />
+                <Button v-if="user.role === 'user'" label="Voltar" rounded type="button" outlined
+                @click="router.push('/')" />
+
+            <Button v-if="user.role === 'aceitetermo'" label="Assinar contrato" type="button" rounded
+                @click="assinarContrato" />
+            <Button v-else-if="user.role === 'user'" label="Assinar contrato" type="button" rounded
+                @click="atualizarContrato" />
         </div>
     </div>
 </template>

@@ -6,8 +6,6 @@ if (user == null) {
     router.push('/auth/login');
 } else if (user.role == 'ACEITETERMO') {
     router.push('/term');
-} else {
-    router.push('/');
 }
 </script>
 
